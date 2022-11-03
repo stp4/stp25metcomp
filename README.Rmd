@@ -7,6 +7,7 @@ output: github_document
 
 
 ```{r setup, include=FALSE}
+require(knitr)
 knitr::opts_chunk$set(echo = TRUE, warnings=FALSE)
 
 library(stp25metcomp)
@@ -31,7 +32,7 @@ Bland-Altman-Methode Bias (d) systematische Abweichung Messfehler (s) Standardab
 
 ### MetComp
 
-Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means berechnen. Kappa kann aber auch über die xtab() und APA2 berechnet werden. Wobei hier nur 2x2-Tabellen untersucht werden können, hingegen sind bei Kappa() auch mehrere ordinale Kategorien erlaubt.
+Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means berechnen. Kappa kann aber auch über die xtab() berechnet werden. Wobei hier nur 2x2-Tabellen untersucht werden können, hingegen sind bei Kappa() auch mehrere ordinale Kategorien erlaubt.
 
 Ähnliche Methode ist ICC die aber diese zählt eher zur Reliabilitätsanalyse.
 
@@ -60,9 +61,9 @@ group= sample(gl(2, 15, labels = c("Control", "Treat")))
 
 ```
 
-```{r tab-giavarina, results='asis'}
+```{r tab-giavarina }
 
-MetComp(~A+B, Giavarina)
+ kable ( MetComp(~A+B, Giavarina)$stat )
 
 ```
 
@@ -84,8 +85,8 @@ Botulinum <- data.frame(
 ```
 
 
-```{r tab-sachs, results='asis'}
-# APA2(xtabs(~A+B, Botulinum), test=TRUE)
+```{r tab-sachs }
+ 
 
 MetComp(~A+B, Botulinum)
  
@@ -109,10 +110,10 @@ DF<- data.frame(
   Therapie= sample(gl(2, 15, labels = c("Control", "Treat")))
 )
 
-rslt <- DF %>% MetComp_BAP2(A,B)
+rslt <- DF %>% MetComp(A,B)
 head(rslt$data)
 
-rslt <- DF %>% MetComp_BAP2(A,B,  by=~Therapie)
+rslt <- DF %>% MetComp(A,B,  by=~Therapie)
 head(rslt$data)
 
 plot(rslt)
