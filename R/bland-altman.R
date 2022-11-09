@@ -126,7 +126,7 @@ bland.altman.stats <- function (dfr,
       upper.limit.ci.upper = upper.limit.percent +  t2 * se.ci.percent
     )
 
-  ci_format <-   stp25rndr::rndr_CI(cbind(
+  ci_format <-   stp25stat2:::rndr_CI(cbind(
     low = c(CI.lines[3], CI.lines[1], CI.lines[5]),
     up = c(CI.lines[4], CI.lines[2], CI.lines[6])
   ) ,
@@ -144,8 +144,8 @@ bland.altman.stats <- function (dfr,
       "d+1.96s"
     ),
     Unit = c(
-      stp25rndr::Format2(based.on - 1, 0),
-      stp25rndr::Format2(
+      stp25stat2::render_f(based.on - 1, 0),
+      stp25stat2::render_f(
         c(
           mean.diffs,
           sd.diffs,
@@ -159,9 +159,9 @@ bland.altman.stats <- function (dfr,
     CI = c(NA, ci_format[1], NA, NA, ci_format[2], ci_format[3]) ,
 
 
-    SE = stp25rndr::Format2(c(NA, se.mean, NA, NA, se.ci, se.ci), digits),
+    SE = stp25stat2::render_f(c(NA, se.mean, NA, NA, se.ci, se.ci), digits),
     Percent = c("",
-                stp25rndr::rndr_percent(
+                stp25stat2:::rndr_percent(
                   c(
                     mean.percent,
                     ssd.percent,
