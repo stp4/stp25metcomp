@@ -61,7 +61,19 @@ MetComp_Kappa <- function(x,
 #'
 #' @examples
 #'
-#'
+#' Botulinum <- data.frame(
+#' A= factor(c(rep(1, 14), rep(1, 3),
+#'             rep(0, 5),rep(0, 18)),
+#'           1:0, c("+", "-")),
+#' B= factor(c(rep(1, 14), rep(0, 3),
+#'             rep(1, 5),rep(0, 18)),
+#'           1:0, c("+", "-")))
+#' 
+#' 
+#' vcd::Kappa(xtabs(~A+B, Botulinum))
+#' Tbll_kappa(xtabs(~A+B, Botulinum))
+#' 
+#' Tbll_kappa(~A+B, Botulinum)
 #'
 #'
 #'
@@ -94,18 +106,18 @@ Tbll_kappa <- function(x, ...,
 
 }
 
-require(vcd)
-## ----sachs-627-data ---------------------------------------
-Botulinum <- data.frame(
-  A= factor(c(rep(1, 14), rep(1, 3),
-              rep(0, 5),rep(0, 18)),
-            1:0, c("+", "-")),
-  B= factor(c(rep(1, 14), rep(0, 3),
-              rep(1, 5),rep(0, 18)),
-            1:0, c("+", "-")))
-
-
-vcd::Kappa(xtabs(~A+B, Botulinum))
-Tbll_kappa(xtabs(~A+B, Botulinum))
-
-Tbll_kappa(~A+B, Botulinum)
+# require(vcd)
+# ## ----sachs-627-data ---------------------------------------
+# Botulinum <- data.frame(
+#   A= factor(c(rep(1, 14), rep(1, 3),
+#               rep(0, 5),rep(0, 18)),
+#             1:0, c("+", "-")),
+#   B= factor(c(rep(1, 14), rep(0, 3),
+#               rep(1, 5),rep(0, 18)),
+#             1:0, c("+", "-")))
+# 
+# 
+# vcd::Kappa(xtabs(~A+B, Botulinum))
+# Tbll_kappa(xtabs(~A+B, Botulinum))
+# 
+# Tbll_kappa(~A+B, Botulinum)

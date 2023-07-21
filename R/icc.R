@@ -139,7 +139,7 @@ Tbll_icc.matrix <-
 #' 23       9   obj5  rater4
 #' 24       7   obj6  rater4")
 #'
-#' ICC2(DF,
+#' Tbll_icc(DF,
 #'      value = "ratings",
 #'      obs = "obs",
 #'      rater = "rate")

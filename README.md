@@ -1,7 +1,17 @@
 stp25metcomp
 ================
 Wolfgang Peter
-2022-11-03
+2023-04-11
+
+Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means
+berechnen. Kappa kann aber auch über die xtab() berechnet werden. Wobei
+hier nur 2x2-Tabellen untersucht werden können, hingegen sind bei
+Kappa() auch mehrere ordinale Kategorien erlaubt.
+
+Ähnliche Methode ist ICC die aber diese zählt eher zur
+Reliabilitätsanalyse.
+
+Funktionen: MetComp, MetComp_BAP, und Tbll_kappa, Tbll_icc
 
 ## Methodenvergleich
 
@@ -23,19 +33,126 @@ Bland-Altman-Methode Bias (d) systematische Abweichung Messfehler (s)
 Standardabweichung der Differenz Limits of agreement (LOA) Intervall von
 95 (entspricht d+-1.96 -\> es wird eine Normalverteilung unterstellt).
 
-### MetComp
+### Kappa Beispiel Botulinum
 
-Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means
-berechnen. Kappa kann aber auch über die xtab() berechnet werden. Wobei
-hier nur 2x2-Tabellen untersucht werden können, hingegen sind bei
-Kappa() auch mehrere ordinale Kategorien erlaubt.
+Beispiel Botulinum A
 
-Ähnliche Methode ist ICC die aber diese zählt eher zur
-Reliabilitätsanalyse.
+``` r
+kable( MetComp(~A+B, Botulinum)$stat )
+```
 
-Funktionen: MetComp, BAP, und Kappa
+    ## Warning: Unknown or uninitialised column: `stat`.
 
-Beispiel Altman and Bland \[@Giavarina2015\]
+``` r
+ xt <-xtabs(~A+B, Botulinum)
+ kable(Klassifikation(xt)$statistic[c(1,3,4), ])
+```
+
+| Statistic              | estimate |
+|:-----------------------|:---------|
+| Accuracy               | 0.80     |
+| No Information Rate    | 0.52     |
+| P-Value \[Acc \> NIR\] | p\<.001  |
+
+### ICC
+
+     Less than 0.50: Poor reliability
+     Between 0.5 and 0.75: Moderate reliability
+     Between 0.75 and 0.9: Good reliability
+     Greater than 0.9: Excellent reliability
+
+Suppose four different judges were asked to rate the quality of 10
+different college entrance exams. The results are shown below: The
+intraclass correlation coefficient (ICC) turns out to be 0.782.
+
+Based on the rules of thumb for interpreting ICC, we would conclude that
+an ICC of 0.782 indicates that the exams can be rated with “good”
+reliability by different raters.
+
+``` r
+data <- data.frame(
+  A = c(1, 1, 3, 6, 6, 7, 8, 9, 8, 7),
+  B = c(2, 3, 8, 4, 5, 5, 7, 9, 8, 8),
+  C = c(0, 4, 1, 5, 5, 6, 6, 9, 8, 8),
+  D = c(1, 2, 3, 3, 6, 4, 6, 8, 8, 9)
+)
+
+
+Tbll_icc(data)
+```
+
+    ## boundary (singular) fit: see help('isSingular')
+
+    ## # A tibble: 1 × 8
+    ##   type  ICC   `lower bound` `upper bound` F       df1   df2 p    
+    ## * <chr> <chr> <chr>         <chr>         <chr> <dbl> <dbl> <chr>
+    ## 1 ICC2k 0.93  0.83          0.98          15.4      9    27 <.001
+
+``` r
+DF <- stp25tools::get_data("
+nr   ratings obs    rate
+1        9   obj1  rater1
+2        6   obj2  rater1
+3        8   obj3  rater1
+4        7   obj4  rater1
+5       10   obj5  rater1
+6        6   obj6  rater1
+7        2   obj1  rater2
+8        1   obj2  rater2
+9        4   obj3  rater2
+10       1   obj4  rater2
+11       5   obj5  rater2
+12       2   obj6  rater2
+13       5   obj1  rater3
+14       3   obj2  rater3
+15       6   obj3  rater3
+16       2   obj4  rater3
+17       6   obj5  rater3
+18       4   obj6  rater3
+19       8   obj1  rater4
+20       2   obj2  rater4
+21       8   obj3  rater4
+22       6   obj4  rater4
+23       9   obj5  rater4
+24       7   obj6  rater4")
+```
+
+``` r
+head(DF)
+```
+
+    ## # A tibble: 6 × 4
+    ##      nr ratings obs   rate  
+    ##   <int>   <int> <fct> <fct> 
+    ## 1     1       9 obj1  rater1
+    ## 2     2       6 obj2  rater1
+    ## 3     3       8 obj3  rater1
+    ## 4     4       7 obj4  rater1
+    ## 5     5      10 obj5  rater1
+    ## 6     6       6 obj6  rater1
+
+``` r
+Tbll_icc(DF,
+     value = "ratings",
+     obs = "obs",
+     rater = "rate")
+```
+
+    ## # A tibble: 1 × 8
+    ##   type  ICC   `lower bound` `upper bound` F       df1   df2 p    
+    ## * <chr> <chr> <chr>         <chr>         <chr> <dbl> <dbl> <chr>
+    ## 1 ICC2k 0.62  0.07          0.93          11.0      5    15 <.001
+
+``` r
+Giavarina <- transform(Giavarina, C = round( A + rnorm(30,0,20)),
+                D = round( A + rnorm(30,0,10) + A/10 ),
+                E = round( A + rnorm(30,5,10) + (100-A/10) ))
+
+
+#ICC2(~A+E, Giavarina, caption="ICC (Korrelationen)")
+```
+
+### Altman and Bland \[@Giavarina2015\]
 
 ``` r
  kable ( MetComp(~A+B, Giavarina)$stat )
@@ -50,40 +167,7 @@ Beispiel Altman and Bland \[@Giavarina2015\]
 | d-1.96s                | -94.02 | \[-115.97, -72.07\] | 10.73 | \<0.1%  |
 | d+1.96s                | 39.02  | \[17.07, 60.97\]    | 10.73 | 117.8%  |
 
-#### Beispiel Botulinum A
-
-Sachs Angewandte Statistik Seite 627
-
 ``` r
-MetComp(~A+B, Botulinum)
-```
-
-    ## Warning in format.data.frame(if (omit) x[seq_len(n0), , drop = FALSE] else x, :
-    ## corrupt data frame: columns will be truncated or padded with NAs
-
-    ##                Source Kappa            CI  ASE z.Test p.value              stat
-    ## Unweighted Unweighted  0.60 [0.35,  0.85] 0.13   4.71   <.001 # A tibble: 1 × 6
-
-``` r
- xt <-xtabs(~A+B, Botulinum)
- Klassifikation(xt)$statistic[c(1,3,4), ]
-```
-
-# A tibble: 3 × 2
-
-Statistic estimate <chr> <chr>  
-1 Accuracy 0.80  
-2 No Information Rate 0.52  
-3 P-Value \[Acc \> NIR\] p\<.001
-
-``` r
-set.seed(0815)
-DF<- data.frame(
-  A=c(1, 5,10,20,50,40,50,60,70,80, 90,100,150,200,250,300,350,400,450,500,550,600,650,700,750,800,850,900, 950,1000),
-  B=c(8,16,30,14,39,54,40,68,72,62,122, 80,181,259,275,380,320,434,479,587,626,648,738,766,793,851,871,957,1001, 980),
-  Therapie= sample(gl(2, 15, labels = c("Control", "Treat")))
-)
-
 rslt <- DF %>% MetComp(A,B)
 head(rslt$data)
 ```
@@ -113,16 +197,7 @@ head(rslt$data)
 plot(rslt)
 ```
 
-![](README_files/figure-gfm/unnamed-chunk-1-1.png)<!-- -->
-
-``` r
-Giavarina <- transform(Giavarina, C = round( A + rnorm(30,0,20)),
-                D = round( A + rnorm(30,0,10) + A/10 ),
-                E = round( A + rnorm(30,5,10) + (100-A/10) ))
-
-
-#ICC2(~A+E, Giavarina, caption="ICC (Korrelationen)")
-```
+![](README_files/figure-gfm/unnamed-chunk-5-1.png)<!-- -->
 
 ``` r
 # A - Goldstandart
@@ -152,7 +227,7 @@ plot(x)
 
 ![Bland Altman](README_files/figure-gfm/fig-BlandAltman4-1.png)
 
-### Verschiedene Situationen
+#### Verschiedene Situationen
 
 ``` r
 x<- MetComp_BAP(~A+C, DF)

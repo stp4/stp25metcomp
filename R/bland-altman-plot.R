@@ -107,16 +107,18 @@ plot.bland_altman <- function(x,
                               abline.col = c("black", "black", "black"),
                               abline.lty = c(3, 1, 3),
                               abline.lwd = c(1, 1, 1),
+                              lim1 =NULL,
+                              lim2 = NULL,
+                              lim3 =NULL,
+                              
                               ...) {
   # print(x$lines) # print(x$CI.lines) # print(x$lines.percent) # print(x$CI.lines.percent)
 
   if (par)
     par(mfrow = c(1, length(type)), oma = c(0.4, 1, 1.6, 1))
-
-
-
-  xy_plot_range<- range( c(x$data[, x.var],  x$data[, y.var]), na.rm=TRUE)
-
+  
+  xy_plot_range <- if (is.null(lim1))  range(c(x$data[, x.var], x$data[, y.var]), na.rm = TRUE) else lim1
+  
 
   if("r" %in% type) {
 
@@ -125,7 +127,8 @@ plot.bland_altman <- function(x,
     x$data[, y.var],
     xlab = xlab1,
     ylab = ylab1,
-    xlim=xy_plot_range, ylim=xy_plot_range,
+    xlim=xy_plot_range, 
+    ylim=xy_plot_range,
     main = main1,
     pch = pch,
     col = col,
@@ -155,6 +158,8 @@ plot.bland_altman <- function(x,
 
 
   rgn<-range(x$data$means, finite = TRUE) * c(1, 1.15)
+   
+  ba_range <-  if(is.null(lim2)) range(c(x$data$diffs, x$lines), finite = TRUE) else lim2
   if("d" %in% type) {
   plot(
     x$data$means,
@@ -162,7 +167,7 @@ plot.bland_altman <- function(x,
     type = "n",
     axes = FALSE,
     xlim = rgn,
-    ylim = range(c(x$data$diffs, x$lines), finite = TRUE),
+    ylim = ba_range,
     xlab = xlab2,
     ylab = ylab2,
     main = main2
@@ -187,8 +192,10 @@ plot.bland_altman <- function(x,
        c("-1.96 SD", "Mean", "+1.96 SD"), adj=c(1,0), cex=.7)
   text(x=c(rgn[2],rgn[2]),
        y=x$lines,
-       signif(x$lines, 2)  , adj=c(1,1), cex=.7)
+       signif(x$lines, 2), adj=c(1,1), cex=.7)
 
+  
+  
   axis(1) ## add axes back
   axis(2)
   box()

@@ -108,7 +108,9 @@ MetComp <- function(...,
         ci.level = ci.level,
         digits = digits
       )
-
+   #   "lines"            "CI.lines"         "lines.percent"    "CI.lines.percent"
+   #  [5] "stat"             "data"             "name"             "name.diff"       
+  #   [9] "met_A"            "met_B"   
     res$stat <-
         stp25stat2::prepare_output(
         res$stat,
@@ -127,7 +129,9 @@ MetComp <- function(...,
                     include.unweighted =include.unweighted
                     )
 
-    res$stat <-  stp25stat2::prepare_output(res,
+    res <- 
+      stp25stat2::prepare_output(
+                        res,
                         caption = "Cohen's Kappa-Koeffizient",
                         note = "")
   }
