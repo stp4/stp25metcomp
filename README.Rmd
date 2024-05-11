@@ -191,10 +191,10 @@ DF<- data.frame(
 
 ```{r, fig.height=3.2, fig.width=7}
 
-rslt <- DF %>% MetComp(A,B)
+rslt <- DF |> MetComp(A,B)
 head(rslt$data)
 
-rslt <- DF %>% MetComp(A,B,  by=~Therapie)
+rslt <- DF |> MetComp(A,B,  by=~Therapie)
 head(rslt$data)
 
 plot(rslt)
@@ -206,14 +206,14 @@ plot(rslt)
 # A - Goldstandart
 
 x <- MetComp_BAP(~A+B+E, Giavarina)
-# x %>% Output("BA-Analyse der Messwertreihe")
+# x |> Output("BA-Analyse der Messwertreihe")
 plot(x)
 
 ```
 
 ```{r fig-BlandAltman4, fig.cap = "Bland Altman", fig.width=7, fig.height=3.2, cache=TRUE}
 x <- MetComp_BAP(~A+E+B, Giavarina)
-# x %>% Output("BA-Analyse der Messwertreihe")
+# x |> Output("BA-Analyse der Messwertreihe")
 plot(x)
 
 ```

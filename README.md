@@ -1,7 +1,7 @@
 stp25metcomp
 ================
 Wolfgang Peter
-2023-04-11
+2024-05-11
 
 Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means
 berechnen. Kappa kann aber auch über die xtab() berechnet werden. Wobei
@@ -12,6 +12,14 @@ Kappa() auch mehrere ordinale Kategorien erlaubt.
 Reliabilitätsanalyse.
 
 Funktionen: MetComp, MetComp_BAP, und Tbll_kappa, Tbll_icc
+
+<!-- badges: start -->
+
+[![Lifecycle:
+experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN
+status](https://www.r-pkg.org/badges/version/stp25stat2)](https://CRAN.R-project.org/package=stp25stat2)
+<!-- badges: end -->
 
 ## Methodenvergleich
 
@@ -168,7 +176,7 @@ Giavarina <- transform(Giavarina, C = round( A + rnorm(30,0,20)),
 | d+1.96s                | 39.02  | \[17.07, 60.97\]    | 10.73 | 117.8%  |
 
 ``` r
-rslt <- DF %>% MetComp(A,B)
+rslt <- DF |> MetComp(A,B)
 head(rslt$data)
 ```
 
@@ -181,7 +189,7 @@ head(rslt$data)
     ## 6 40 54  47.0   -14     -29.78723
 
 ``` r
-rslt <- DF %>% MetComp(A,B,  by=~Therapie)
+rslt <- DF |> MetComp(A,B,  by=~Therapie)
 head(rslt$data)
 ```
 
@@ -208,11 +216,15 @@ x <- MetComp_BAP(~A+B+E, Giavarina)
     ## Warning: Warning in bland.altman.stats:Mehr als 2 Methoden.
 
 ``` r
-# x %>% Output("BA-Analyse der Messwertreihe")
+# x |> Output("BA-Analyse der Messwertreihe")
 plot(x)
 ```
 
-![Bland Altman](README_files/figure-gfm/fig-BlandAltman3-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BlandAltman3-1.png"
+alt="Bland Altman" />
+<figcaption aria-hidden="true">Bland Altman</figcaption>
+</figure>
 
 ``` r
 x <- MetComp_BAP(~A+E+B, Giavarina)
@@ -221,11 +233,15 @@ x <- MetComp_BAP(~A+E+B, Giavarina)
     ## Warning: Warning in bland.altman.stats:Mehr als 2 Methoden.
 
 ``` r
-# x %>% Output("BA-Analyse der Messwertreihe")
+# x |> Output("BA-Analyse der Messwertreihe")
 plot(x)
 ```
 
-![Bland Altman](README_files/figure-gfm/fig-BlandAltman4-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BlandAltman4-1.png"
+alt="Bland Altman" />
+<figcaption aria-hidden="true">Bland Altman</figcaption>
+</figure>
 
 #### Verschiedene Situationen
 
@@ -234,29 +250,45 @@ x<- MetComp_BAP(~A+C, DF)
 plot(x)
 ```
 
-![A und C Messen das gleiche mit
-SD=20](README_files/figure-gfm/fig-BAx1-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BAx1-1.png"
+alt="A und C Messen das gleiche mit SD=20" />
+<figcaption aria-hidden="true">A und C Messen das gleiche mit
+SD=20</figcaption>
+</figure>
 
 ``` r
 x<- MetComp_BAP(~A+B, DF)
 plot(x)
 ```
 
-![A und B Messen unterschiedliche
-Parameter](README_files/figure-gfm/fig-BAx2-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BAx2-1.png"
+alt="A und B Messen unterschiedliche Parameter" />
+<figcaption aria-hidden="true">A und B Messen unterschiedliche
+Parameter</figcaption>
+</figure>
 
 ``` r
 x<- MetComp_BAP(~A+D, DF)
 plot(x)
 ```
 
-![A und D Messen das unterschiedlich D hat im unteren Wertevereich
-deutlich geringere Werte](README_files/figure-gfm/fig-BAx3-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BAx3-1.png"
+alt="A und D Messen das unterschiedlich D hat im unteren Wertevereich deutlich geringere Werte" />
+<figcaption aria-hidden="true">A und D Messen das unterschiedlich D hat
+im unteren Wertevereich deutlich geringere Werte</figcaption>
+</figure>
 
 ``` r
 x<- MetComp_BAP(~A+E, DF)
 plot(x)
 ```
 
-![A und E Messen das unterschiedlich es esistiert ein Knick im
-Wertebereich 100](README_files/figure-gfm/fig-BAx4-1.png)
+<figure>
+<img src="README_files/figure-gfm/fig-BAx4-1.png"
+alt="A und E Messen das unterschiedlich es esistiert ein Knick im Wertebereich 100" />
+<figcaption aria-hidden="true">A und E Messen das unterschiedlich es
+esistiert ein Knick im Wertebereich 100</figcaption>
+</figure>
