@@ -4,6 +4,7 @@
 \alias{Tbll_icc}
 \alias{Tbll_icc.matrix}
 \alias{Tbll_icc.data.frame}
+\alias{Tbll_icc.lmerMod}
 \title{Interklass Korrelationskoeffizient}
 \usage{
 Tbll_icc(x, ...)
@@ -30,11 +31,21 @@ Tbll_icc(x, ...)
   lmer = TRUE,
   check.keys = FALSE
 )
+
+\method{Tbll_icc}{lmerMod}(
+  ...,
+  names = NULL,
+  digits = 2,
+  by_group = FALSE,
+  tolerance = 1e-05,
+  ci = NULL,
+  iterations = 100
+)
 }
 \arguments{
 \item{x, ...}{an prepare_data2}
 
-\item{...}{an psych::ICC}
+\item{...}{lmer - fits}
 
 \item{missing, alpha, lmer, check.keys}{an psych::ICC}
 
@@ -47,10 +58,16 @@ Tbll_icc(x, ...)
 \item{obs}{eindeutige Id kann auch aus meheren Parametern bestehen}
 
 \item{value}{Messwert}
+
+\item{names, digits}{an prepare data}
+
+\item{by_group, tolerance, ci, iterations}{geht an icc {performance}}
 }
 \value{
 data.frame   tibble: x × 8
  type  ICC   lower bound upper bound F       df1   df2 p
+
+data.frame
 }
 \description{
 intraclass correlation coefficient (ICC)

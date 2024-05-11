@@ -24,6 +24,10 @@ Die generische Funktion MetComp() kann sowohl Kappa als auch Tukey-means berechn
 
 Funktionen: MetComp, MetComp_BAP, und Tbll_kappa, Tbll_icc
 
+<!-- badges: start -->
+[![Lifecycle: experimental](https://img.shields.io/badge/lifecycle-experimental-orange.svg)](https://www.tidyverse.org/lifecycle/#experimental)
+[![CRAN status](https://www.r-pkg.org/badges/version/stp25stat2)](https://CRAN.R-project.org/package=stp25stat2)
+<!-- badges: end -->
 
 ## Methodenvergleich
 
